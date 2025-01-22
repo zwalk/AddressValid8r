@@ -1,0 +1,22 @@
+module Models
+  class Address
+    @city: String?
+    @state: String?
+    @street: String?
+    @zipcode: String?
+
+    attr_reader city: String?
+    attr_reader key: String
+    attr_reader plus4_code: String?
+    attr_reader state: String?
+    attr_reader street: String?
+    attr_accessor validated_address: Address
+    attr_accessor validation_sent: bool
+    attr_reader zipcode: String?
+
+    def to_hash: -> Hash[Symbol, String]
+
+    def valid?: -> bool
+  end
+end
+

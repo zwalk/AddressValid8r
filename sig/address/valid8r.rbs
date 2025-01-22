@@ -1,0 +1,7 @@
+module Address
+  module Valid8r
+    VERSION: String
+    # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+    def self.process: -> void
+  end
+end

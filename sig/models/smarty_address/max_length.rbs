@@ -1,0 +1,10 @@
+module Models
+  module SmartyAddress
+    module MaxLength
+      CITY: int
+      STATE: int
+      STREET: int
+      ZIPCODE: int
+    end
+  end
+end

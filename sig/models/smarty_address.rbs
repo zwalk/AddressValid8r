@@ -1,0 +1,23 @@
+module Models
+  class SmartyAddress
+    INVALID_ADDRESS: String
+
+    NOT_PROCESSED: String
+
+    @validation_sent: bool
+
+    attr_accessor validated_address: Address
+
+    attr_accessor validation_sent: bool
+
+    def cli_format_validated_address: -> String
+
+    def to_cli_format: -> String
+
+    def valid?: -> bool
+
+    private
+
+    def nil_safe_length: -> int
+  end
+end

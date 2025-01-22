@@ -1,0 +1,26 @@
+module Clients
+  class SmartyClient
+    CANDIDATES: int
+    HEADERS: Hash[String, String]
+    STREET_ADDRESS_URI: String
+
+    @http: Net::HTTP
+    @uri: URI::Generic
+
+    @url_string: String?
+
+    def self.build_address: -> Models::Address
+
+    def self.http: -> Net::HTTP
+
+    def self.meets_requirements?: -> bool
+
+    def self.request: -> Net::HTTP::Post
+
+    def self.uri: -> URI::Generic
+
+    def self.url_string: -> String
+
+    def self.validate_addresses: -> Array[Models::Address]
+  end
+end

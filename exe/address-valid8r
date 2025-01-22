@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "address/valid8r"
+require 'dotenv'
+require "optparse"
+
+Dotenv.load
+
+options = {}
+
+gem_spec = Gem::Specification::load('address-valid8r.gemspec')
+
+begin
+  OptionParser.new do |opts|
+    opts.banner = "Usage: #{gem_spec.name} [options]"
+    opts.define_head gem_spec.summary
+    opts.separator ""
+    opts.on("-f", "--file [file/path/to/csv]", "absolute file path to your csv of addresses") do |file|
+      options[:file] = file
+    end
+  end.parse!
+
+  raise OptionParser::MissingArgument if options[:file] == nil
+
+  Address::Valid8r.process(options[:file])
+rescue OptionParser::MissingArgument
+  puts "File Path is Required. Run #{File.basename($0)} --help for guidance."
+  exit 1
+end
