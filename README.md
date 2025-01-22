@@ -56,6 +56,20 @@ There is a small help page if this option is forgotten by running
 address-valid8r --help
 ```
 
+the csv at the file path provided must have a header row.
+The accepted headers are `street`, `city`, `state`, `zip code`
+
+Ex:
+```csv
+Street, City, Zip Code
+143 e Maine Street, Columbus, 43215
+1 Empora St, Title, 11111
+, Dublin, 00000
+```
+
+**note** state is left out here and the gem should still be able to send it through for validation. The Street field is the only absolutely required field, 
+but if that is all that is sent in, it must include at least a street address and the zip code
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
