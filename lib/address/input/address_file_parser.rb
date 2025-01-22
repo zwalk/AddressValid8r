@@ -23,7 +23,7 @@ module Address
           end unless file_path.nil?
 
           addresses
-        rescue Errno::ENOENT, NoFilePathProvidedError
+        rescue Errno::ENOENT, NoFilePathProvidedError, Errno::EISDIR
           print_file_not_found file_path
           []
         end

@@ -62,5 +62,25 @@ RSpec.describe Address::Input::AddressFileParser do
 
       it_behaves_like 'a file path that does not exist'
     end
+
+    context 'when CSV throws an Errno::ENOENT error' do
+      before do
+        allow(CSV).to receive(:foreach).and_raise(Errno::ENOENT)
+      end
+
+      let(:file_path) { nil }
+
+      it_behaves_like 'a file path that does not exist'
+    end
+
+    context 'when CSV throws an Errno::EISDIR error' do
+      before do
+        allow(CSV).to receive(:foreach).and_raise(Errno::EISDIR)
+      end
+
+      let(:file_path) { nil }
+
+      it_behaves_like 'a file path that does not exist'
+    end
   end
 end
