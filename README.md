@@ -36,7 +36,7 @@ the command `address-valid8r` should now be available
 
 ## Setting API Key, Token, and License
 
-For the sake of this exercise, we will just store them in the super secret .env file, just switch those values to yours
+For the sake of this exercise, we will just store them in the super secret [.env](https://github.com/zwalk/AddressValid8r/blob/main/.env) file, just switch those values to yours
 
 ## Usage
 
