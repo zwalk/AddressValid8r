@@ -1,15 +1,16 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require "bundler/setup"
 require "address/valid8r"
-require 'dotenv'
+require "dotenv"
 require "optparse"
 
 Dotenv.load
 
 options = {}
 
-gem_spec = Gem::Specification::load('address-valid8r.gemspec')
+gem_spec = Gem::Specification.load("address-valid8r.gemspec")
 
 begin
   OptionParser.new do |opts|
@@ -21,10 +22,10 @@ begin
     end
   end.parse!
 
-  raise OptionParser::MissingArgument if options[:file] == nil
+  raise OptionParser::MissingArgument if options[:file].nil?
 
   Address::Valid8r.process(options[:file])
 rescue OptionParser::MissingArgument
-  puts "File Path is Required. Run #{File.basename($0)} --help for guidance."
+  puts "File Path is Required. Run #{File.basename($PROGRAM_NAME)} --help for guidance."
   exit 1
 end

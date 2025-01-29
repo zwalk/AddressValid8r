@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-require 'securerandom'
+require "securerandom"
 
 module Models
+  ## Address
+  # basic address data structure of a US Address
   class Address
     attr_reader :street,
                 :city,
@@ -23,21 +25,21 @@ module Models
     def to_hash
       {
         key: @key,
-        street: @street || '',
-        city: @city || '',
-        state: @state || '',
-        zipcode: @zipcode || '',
-        plus4_code: @plus4_code || '',
+        street: @street || "",
+        city: @city || "",
+        state: @state || "",
+        zipcode: @zipcode || "",
+        plus4_code: @plus4_code || ""
       }
     end
 
     def ==(other)
       other.class == self.class &&
-        other.street == self.street &&
-        other.city == self.city &&
-        other.state == self.state &&
-        other.zipcode == self.zipcode &&
-        other.plus4_code == self.plus4_code
+        other.street == street &&
+        other.city == city &&
+        other.state == state &&
+        other.zipcode == zipcode &&
+        other.plus4_code == plus4_code
     end
   end
 end

@@ -6,33 +6,48 @@ valid8 u l8r, sk8r... sorry, i'll go.
 
 ## Installation
 
-Pull this repo to your machine and then cd into the AddressValid8r directory
+As of writing these instructions, I used:
+- gem -v `3.3.26`
+- ruby -v `3.1.4p223`
+- bundler -v `2.3.26`
 
-run `gem build address-valid8r.gemspec`
+1. Pull this repo to your machine
 
-output:
+2. cd into the AddressValid8r directory
 
-```
-WARNING:  licenses is empty, but is recommended.  Use a license identifier from
-http://spdx.org/licenses or 'Nonstandard' for a nonstandard license.
-WARNING:  See https://guides.rubygems.org/specification-reference/ for help
-  Successfully built RubyGem
-  Name: address-valid8r
-  Version: 0.1.0
-  File: address-valid8r-0.1.0.gem
-```
+3. run `gem build address-valid8r.gemspec`
 
-run `gem install ./address-valid8r-0.1.0.gem`
+    output:
+    
+    ```
+    WARNING:  licenses is empty, but is recommended.  Use a license identifier from
+    http://spdx.org/licenses or 'Nonstandard' for a nonstandard license.
+    WARNING:  See https://guides.rubygems.org/specification-reference/ for help
+      Successfully built RubyGem
+      Name: address-valid8r
+      Version: 0.1.0
+      File: address-valid8r-0.1.0.gem
+    ```
 
-output:
+4. run `gem install ./address-valid8r-0.1.0.gem`
 
-```
-Successfully installed address-valid8r-0.1.0
-Parsing documentation for address-valid8r-0.1.0
-Done installing documentation for address-valid8r after 0 seconds
-1 gem installed
-```
-the command `address-valid8r` should now be available
+    output:
+    
+    ```
+    Successfully installed address-valid8r-0.1.0
+    Parsing documentation for address-valid8r-0.1.0
+    Done installing documentation for address-valid8r after 0 seconds
+    1 gem installed
+    ```
+   
+the command `address-valid8r` should now be available in your terminal
+
+#### alternative
+
+If there is issues with the installation, this can be run directly via:
+
+1. make sure your terminal is at the location of the root dir of this code base
+2. `./exe/address-valid8r -f /your/file/path`
 
 ## Setting API Key, Token, and License
 
@@ -69,3 +84,11 @@ Street, City, Zip Code
 
 **note** state is left out here and the gem should still be able to send it through for validation. The Street field is the only absolutely required field, 
 but if that is all that is sent in, it must include at least a street address and the zip code
+
+## Running Tests
+From the root directory of this code base, run:
+`bundle exec rspec`
+
+## Running Rubocop
+From the root directory of this code base, run:
+`bundle exec rubocop`

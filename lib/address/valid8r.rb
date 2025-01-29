@@ -5,8 +5,11 @@ require "address/clients/smarty_client"
 require "address/input/address_file_parser"
 
 module Address
+  ## Valid8r
+  # Intended to be the module that begins the validation and outputs the result
   module Valid8r
     class Error < StandardError; end
+
     def self.process(file_path)
       addresses = Input::AddressFileParser.parse(file_path)
 
@@ -15,7 +18,7 @@ module Address
       elsif addresses.size > 100
         puts "More than 100 Addresses at a time not supported."
       else
-        Clients::SmartyClient.validate_addresses(addresses).each do |address|
+        Clients::SmartyClient.new.validate_addresses(addresses).each do |address|
           puts address.to_cli_format
         end
       end

@@ -4,6 +4,12 @@ module Address
       def self.parse: -> Array[Models::Address]
 
       def self.print_file_not_found: -> void
+
+      def self.addresses_from_csv: -> Array[Models::SmartyAddress]
+
+      private
+
+      def self.build_smarty_address: -> Models::SmartyAddress
     end
   end
 end

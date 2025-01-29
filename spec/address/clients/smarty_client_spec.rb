@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-require 'address/models/address'
-require 'address/models/smarty_address'
-require 'json'
-require 'net/http'
-require 'securerandom'
-require 'uri'
+require "address/models/address"
+require "address/models/smarty_address"
+require "json"
+require "net/http"
+require "securerandom"
+require "uri"
 
 RSpec.describe Clients::SmartyClient do
-
   before do
     allow(Net::HTTP).to receive(:new).and_return(mocked_net_http)
     allow(mocked_net_http).to receive(:use_ssl=).and_return(nil)
@@ -18,7 +17,7 @@ RSpec.describe Clients::SmartyClient do
     allow(ENV).to receive(:[]).with("AUTH_ID").and_return("AUTH_ID")
     allow(ENV).to receive(:[]).with("AUTH_TOKEN").and_return("AUTH_TOKEN")
     allow(ENV).to receive(:[]).with("LICENSE_TYPE").and_return("LICENSE_TYPE")
-    allow(SecureRandom).to receive(:uuid).and_return(5)
+    allow(SecureRandom).to receive(:uuid).and_return(key_value)
     allow(JSON).to receive(:parse).and_call_original
   end
 
@@ -29,80 +28,82 @@ RSpec.describe Clients::SmartyClient do
     instance_double(Net::HTTPResponse)
   end
   let(:mocked_net_http_post) do
-    Net::HTTP::Post.new(URI('https://www.some_uri.com'), described_class::HEADERS)
+    Net::HTTP::Post.new(URI("https://www.some_uri.com"), described_class::HEADERS)
   end
   let(:request_uri) do
-    URI('https://us-street.api.smarty.com/street-address?auth-id=AUTH_ID&auth-token=AUTH_TOKEN&license=LICENSE_TYPE')
+    URI("https://us-street.api.smarty.com/street-address?auth-id=AUTH_ID&auth-token=AUTH_TOKEN&license=LICENSE_TYPE")
   end
   let(:response) do
     [
       {
         input_id: input_id,
-        delivery_line_1: street,
+        # rubocop disable is necessary to keep this symbol matched to the API response structure
+        delivery_line_1: street, # rubocop:disable Naming/VariableNumber
         components: {
           city_name: city,
           state_abbreviation: state,
           zipcode: zipcode,
-          plus4_code: plus4_code,
+          plus4_code: plus4_code
         }
       }
     ]
   end
   let(:input_id) { 1 }
-  let(:street) { '5678 whodoyouappreciate blvd' }
-  let(:city) { 'Richmond' }
-  let(:state) { 'NY' }
-  let(:zipcode) { '19106' }
-  let(:plus4_code) { '9876' }
+  let(:street) { "5678 whodoyouappreciate blvd" }
+  let(:city) { "Richmond" }
+  let(:state) { "NY" }
+  let(:zipcode) { "19106" }
+  let(:plus4_code) { "9876" }
+  let(:key_value) { 5 }
 
-  describe '#validate_addresses' do
-    subject { described_class.validate_addresses(addresses) }
+  describe "#validate_addresses" do
+    subject { described_class.new.validate_addresses(addresses) }
 
-    context 'when addresses is empty' do
+    context "when addresses is empty" do
       let(:addresses) { [] }
 
-      it 'returns nil' do
+      it "returns nil" do
         expect(subject).to eq nil
       end
     end
 
-    context 'when there are addresses to validate' do
+    context "when there are addresses to validate" do
+      before(:each) do
+        subject
+      end
+
+      let(:input_id) { 5 }
       let(:addresses) { [address] }
-      let(:address) { Models::SmartyAddress.new(address_data_1) }
-      let(:address_data_1) do
+      let(:address) { Models::SmartyAddress.new(address_data) }
+      let(:address_data) do
         {
-          street: '567 whodoyouappreciate blvd',
-          city: 'Richmond',
-          state: 'NY',
-          zipcode: '19106',
+          street: "567 whodoyouappreciate blvd",
+          city: "Richmond",
+          state: "NY",
+          zipcode: "19106"
         }
       end
       let(:expected_request_body) do
         [address.to_hash.merge(input_id: 5, candidates: 1)].to_json
       end
 
-      it 'should call http.request' do
-        expect(mocked_net_http).to receive(:request).with(mocked_net_http_post)
-        subject
+      it "should call http.request" do
+        expect(mocked_net_http).to have_received(:request).with(mocked_net_http_post)
       end
 
-      it 'should build the expected request body' do
-        subject
+      it "should build the expected request body" do
         expect(mocked_net_http_post.body).to eq expected_request_body
       end
 
-      it 'calls JSON to parse the response body' do
-        expect(JSON).to receive(:parse)
-        subject
+      it "calls JSON to parse the response body" do
+        expect(JSON).to have_received(:parse)
       end
 
-      it 'sets the address processed to validation_sent equals true' do
-        subject
+      it "sets the address processed to validation_sent equals true" do
         expect(address.validation_sent).to eq true
       end
 
-      context 'when there is a matching result' do
-        let(:input_id) { 5 }
+      context "when there is a matching result" do
         let(:expected_validated_address) do
           Models::Address.new(
             street: street,
@@ -113,20 +114,19 @@ RSpec.describe Clients::SmartyClient do
           )
         end
 
-        it 'sets that result to the validated_address' do
-          subject
+        it "sets that result to the validated_address" do
           expect(address.validated_address).to eq expected_validated_address
         end
       end
 
-      context 'when there is no matching result' do
+      context "when there is no matching result" do
+        let(:key_value) { 0 }
 
-        it 'maintains validated_address as nil' do
+        it "maintains validated_address as nil" do
           subject
-          expect(address.validated_address).to eq nil
+          expect(address.validated_address).to be_nil
         end
       end
     end
   end
-
 end

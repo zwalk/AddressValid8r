@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module Models
+  ## SmartyAddress
+  # a Data Tranfer Object for the Smarty API, this class inherits basic address properties
+  # but also contains knowledge of validity as it pertains to the Smarty API requirements
+  # and is able to format itself into a readable CLI output
   class SmartyAddress < Address
     INVALID_ADDRESS = "Invalid Address"
     NOT_PROCESSED = "Not Processed"

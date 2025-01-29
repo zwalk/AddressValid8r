@@ -4,23 +4,30 @@ module Clients
     HEADERS: Hash[String, String]
     STREET_ADDRESS_URI: String
 
+    @parsed_response: Array[Hash[Symbol, String]]?
     @http: Net::HTTP
     @uri: URI::Generic
 
     @url_string: String?
 
-    def self.build_address: -> Models::Address
+    def validate_addresses: -> Array[Models::Address]
 
-    def self.http: -> Net::HTTP
+    def clear_parsed_response!: -> void
 
-    def self.meets_requirements?: -> bool
+    private
 
-    def self.request: -> Net::HTTP::Post
+    def build_address: -> Models::Address
 
-    def self.uri: -> URI::Generic
+    def http: -> Net::HTTP
 
-    def self.url_string: -> String
+    def meets_requirements?: -> bool
 
-    def self.validate_addresses: -> Array[Models::Address]
+    def request: -> Net::HTTP::Post
+
+    def uri: -> URI::Generic
+
+    def url_string: -> String
+
+    def parsed_response: -> Array[Hash[Symbol, String]]
   end
 end
