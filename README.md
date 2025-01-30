@@ -58,6 +58,7 @@ Enter your Auth token:
 Enter your License type:
 ```
 The values that are input are hidden. They will be added to your local .env file within the root directory of this code base. 
+(only locally)
 
 The values can be reset by adding the `-r` or `--reset` flag, which will prompt the script to ask you for these values again
 
