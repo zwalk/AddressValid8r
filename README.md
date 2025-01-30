@@ -51,7 +51,15 @@ If there is issues with the installation, this can be run directly via:
 
 ## Setting API Key, Token, and License
 
-For the sake of this exercise, we will just store them in the super secret [.env](https://github.com/zwalk/AddressValid8r/blob/main/.env) file, just switch those values to yours
+Upon first run, address-valid8r will ask you for these values.
+```shell
+Enter your Auth id:
+Enter your Auth token:
+Enter your License type:
+```
+The values that are input are hidden. They will be added to your local .env file within the root directory of this code base. 
+
+The values can be reset by adding the `-r` or `--reset` flag, which will prompt the script to ask you for these values again
 
 ## Usage
 

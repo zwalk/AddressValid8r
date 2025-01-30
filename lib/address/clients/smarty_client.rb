@@ -20,6 +20,18 @@ module Clients
       return if addresses.empty?
 
       http_response = http.request(request(addresses))
+      if http_response.code == "200"
+        handle_success(addresses, http_response)
+      else
+        puts "Something went wrong."
+        puts "status: #{http_response.code}, error: #{http_response.body}"
+        []
+      end
+    end
+
+    private
+
+    def handle_success(addresses, http_response)
       addresses.each do |address|
         address.validation_sent = true
         validated_result = parsed_response(http_response.body).select do |validation|
@@ -28,8 +40,6 @@ module Clients
         address.validated_address = build_address(validated_result) unless validated_result.nil?
       end
     end
-
-    private
 
     def parsed_response(body)
       @parsed_response ||= JSON.parse(body, symbolize_names: true)

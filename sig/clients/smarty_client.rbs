@@ -18,6 +18,8 @@ module Clients
 
     def build_address: -> Models::Address
 
+    def handle_success: -> Array[Models::Address]
+
     def http: -> Net::HTTP
 
     def meets_requirements?: -> bool

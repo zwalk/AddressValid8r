@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require "auth/authorizer"
 require "bundler/setup"
 require "address/valid8r"
 require "dotenv"
@@ -20,11 +21,23 @@ begin
     opts.on("-f", "--file [file/path/to/csv]", "absolute file path to your csv of addresses") do |file|
       options[:file] = file
     end
+
+    opts.on("-r", "--reset", "reset your auth id, auth token, and license type") do
+      options[:reset] = true
+      puts "clearing environment variables"
+    end
   end.parse!
 
-  raise OptionParser::MissingArgument if options[:file].nil?
+  Authorizer.reset if options[:reset]
+  Authorizer.authorize
 
-  Address::Valid8r.process(options[:file])
+  if options[:file].nil? && options[:reset]
+    puts "Auth values have been set."
+  elsif options[:file].nil? && options[:reset].nil?
+    raise OptionParser::MissingArgument if options[:file].nil?
+  else
+    Address::Valid8r.process(options[:file])
+  end
 rescue OptionParser::MissingArgument
   puts "File Path is Required. Run #{File.basename($PROGRAM_NAME)} --help for guidance."
   exit 1

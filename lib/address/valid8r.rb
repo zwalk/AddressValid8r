@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "valid8r/version"
 require "address/clients/smarty_client"
 require "address/input/address_file_parser"
 

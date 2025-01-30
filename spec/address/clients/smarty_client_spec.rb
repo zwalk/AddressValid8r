@@ -9,11 +9,12 @@ require "uri"
 
 RSpec.describe Clients::SmartyClient do
   before do
+    $stdout = output
     allow(Net::HTTP).to receive(:new).and_return(mocked_net_http)
     allow(mocked_net_http).to receive(:use_ssl=).and_return(nil)
     allow(mocked_net_http).to receive(:request).and_return(mocked_net_http_response)
     allow(Net::HTTP::Post).to receive(:new).and_return(mocked_net_http_post)
-    allow(mocked_net_http_response).to receive(:body).and_return(JSON.generate(response))
+    allow(mocked_net_http_response).to receive(:body).and_return(body)
     allow(ENV).to receive(:[]).with("AUTH_ID").and_return("AUTH_ID")
     allow(ENV).to receive(:[]).with("AUTH_TOKEN").and_return("AUTH_TOKEN")
     allow(ENV).to receive(:[]).with("LICENSE_TYPE").and_return("LICENSE_TYPE")
@@ -21,12 +22,19 @@ RSpec.describe Clients::SmartyClient do
     allow(JSON).to receive(:parse).and_call_original
   end
 
+  after do
+    $stdout = STDOUT
+  end
+
   let(:mocked_net_http) do
     instance_double(Net::HTTP)
   end
   let(:mocked_net_http_response) do
-    instance_double(Net::HTTPResponse)
+    instance_double(Net::HTTPResponse, code: code)
   end
+  let(:code) { "200" }
+  let(:body) { JSON.generate(response) }
+  let(:output) { StringIO.new }
   let(:mocked_net_http_post) do
     Net::HTTP::Post.new(URI("https://www.some_uri.com"), described_class::HEADERS)
   end
@@ -126,6 +134,26 @@ RSpec.describe Clients::SmartyClient do
           subject
           expect(address.validated_address).to be_nil
         end
+      end
+    end
+
+    context "when the call is not a successful response" do
+      let(:addresses) { [address] }
+      let(:address) { Models::SmartyAddress.new(address_data) }
+      let(:address_data) do
+        {
+          street: "567 whodoyouappreciate blvd",
+          city: "Richmond",
+          state: "NY",
+          zipcode: "19106"
+        }
+      end
+      let(:code) { "500" }
+      let(:body) { "hawaiian pizza is pretty good" }
+
+      it "prints the expected error message" do
+        subject
+        expect(output.string).to eq "Something went wrong.\nstatus: #{code}, error: #{body}\n"
       end
     end
   end

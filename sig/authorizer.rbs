@@ -1,0 +1,15 @@
+class Authorizer
+  APPEND: String
+  ENV_FILE_PATH: String
+  REQUIRED_ENV_VALUES: Array[String]
+
+  WRITE: String
+
+  def self.authorize: -> void
+
+  def self.reset: -> void
+
+  private
+
+  def self.write_to_env_file: -> void
+end
